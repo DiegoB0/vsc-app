@@ -1,9 +1,17 @@
-import http from 'http';
-import { Server as webSocketServer } from 'socket.io';
-import app from './app';
-
+const express = require('express');
+const app = express();
+const http = require('http');
 const server = http.createServer(app);
-const httpServer = server.listen(process.env.PORT || 4000);
-const io = new webSocketServer(httpServer);
+const io = require('socket.io')(server, {
+	cors: {
+		origin: '*',
+	},
+});
 
-console.log('Server on port 4000');
+io.on('connection', (socket) => {
+	console.log('A client has connected!');
+});
+
+server.listen(3000, () => {
+	console.log('Server is listening on port 3000');
+});
